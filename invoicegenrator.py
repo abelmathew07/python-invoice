@@ -1,37 +1,29 @@
-import datetime
-from pyinvoice.models import InvoiceInfo, ServiceProviderInfo, ClientInfo, Item
+from datetime import datetime, date
+from pyinvoice.models import InvoiceInfo, ServiceProviderInfo, ClientInfo, Item, Transaction
 from pyinvoice.templates import SimpleInvoice
-import os
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-customer_Name = input('Enter Customer\'s Name : ')
 
 doc = SimpleInvoice('invoice.pdf')
 
-now = datetime.datetime.now()
 
-doc.invoice_info = InvoiceInfo(1729, now, datetime.timedelta(days=7))
+doc.is_paid = True
+
+doc.invoice_info = InvoiceInfo(11022, datetime.now(), datetime.now())  
+
+
 doc.service_provider_info = ServiceProviderInfo(
-   name='SmartHaven',
-    street='Sansad Marg, Gokul Nagar, Janpath, Connaught Place, 110001.',
-    city='New Delhi'
+    name='Xperia',
+    city='Adoor',
+    state='Kerala',
 )
 
-doc.client_info = ClientInfo(name = customer_Name)
 
-while(True):
-    item = input('Enter the name of the item : ')
-    price = int(input('Enter price of the item : '))
-    unit = int(input('Number of units sold : '))
-    description = input('Enter the description of the item : ')
-    doc.add_item(Item(item,description,unit,price))
-    q = input("Do you want to add more items? (y/n)")
-    if q=="n":
-        break
+doc.client_info = ClientInfo(name='Abel', email='abel@gmail.com')
 
-message = 'Thank you for shopping with us today! Come back soon!'
 
-doc.set_item_tax_rate(12)
-doc.set_bottom_tip("Thank you for shopping with us today! Come back soon!")
+doc.add_item(Item('Iphone', '', 1, '65000'))
+
+
+
+doc.set_item_tax_rate(23)  
+doc.set_bottom_tip("Thanks for shopping with us!")
 doc.finish()
-
-print("pdf saved as invoice.pdf")
